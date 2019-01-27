@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Create A Blood Pressure Log With Djang</title>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <h2>Blood Pressure Log</h2>
+  <p>My First Django Blood Pressure Log App</p>
+</div>
+<nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
+  <ul class="navbar-nav">
+    <li class="nav-item active">
+      <a class="nav-link" href="#">Active</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#">Disabled</a>
+    </li>
+  </ul>
+</nav>
+<div class="container">
+  <form  action="" method="post">
+  {% csrf_token %}
+    <div class="form-group row">
+      <div class="col-xs-2">
+        <label for="ex1">SYS [mmHg]</label>
+        <input class="form-control" id="topNumber" name="topNumber" type="text" placeholder="top number">
+      </div>
+      <div class="col-xs-2">
+        <label for="ex2">DIA [mmHg]</label>
+        <input class="form-control" id="bottomNumber" name="bottomNumber" type="text" placeholder="bottom number">
+      </div>
+      <div class="col-xs-2">
+        <label for="ex3">Puls [1/min]</label>
+        <input class="form-control" id="puls" name="puls" type="text" placeholder="Puls">
+      </div>
+      <div class="col-xs-2">
+        <label for="ex4">Date and time</label>
+        <input class="form-control" id="DateTime" name="DateTime" type="date" placeholder="Date and time">
+      </div>
+    </div>
+	<div class="container">
+		<button class="btn btn-primary" name="itemAdd" type="submit">Add item</button>
+		<button class="btn btn-danger" name="itemDelete" formnovalidate="" type="submit" onclick="$('input#sublist').click();">Delete item</button>
+		<button class="btn btn-success" name="Data" type="submit">Data</button>
+		<button class="btn btn-success" name="plotData" type="submit">Data plot</button>
+    </div>
+  <br>
+	  <table class="table">
+		<thead>
+		  <tr>
+			<th>Del/</th>
+			<th>Date and time</th>
+			<th>SYS [mmHg]</th>
+			<th>DIA [mmHg]</th>
+			<th>Puls [1/min]</th>
+		  </tr>
+		</thead>
+		<tbody>
+		{% for groser in bp %} <!-- django template - for loop -->
+		  <tr>
+			<td><input type="checkbox" class="taskCheckbox" name="checkedbox" id="{{ groser.id }}" value="{{ groser.id }}"></td>
+			<td>{{ groser.created }}</td>
+			<td>{{ groser.topNumber }}</td>
+			<td>{{ groser.bottomNumber }}</td>
+			<td>{{ groser.puls }}</td>
+		  </tr>
+		  {% endfor %}
+		</tbody>
+	  </table>
+	</form>
+</div>
+
+</body>
+</html>

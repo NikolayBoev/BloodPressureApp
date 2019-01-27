@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Create A Blood Pressure Log With Djang</title>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <h2>Blood Pressure Data</h2>
+</div>
+<div class="container">
+  {% csrf_token %}
+	  <table class="table">
+		<thead>
+		  <tr>
+			<th>Date and time</th>
+			<th>SYS [mmHg]</th>
+			<th>DIA [mmHg]</th>
+			<th>Puls [1/min]</th>
+		  </tr>
+		</thead>
+		<tbody>
+		{% for groser in bp %} <!-- django template - for loop -->
+		  <tr>
+			<td>{{ groser.created }}</td>
+			<td>{{ groser.topNumber }}</td>
+			<td>{{ groser.bottomNumber }}</td>
+			<td>{{ groser.puls }}</td>
+		  </tr>
+		  {% endfor %}
+		</tbody>
+	  </table>
+	</form>
+</div>
+
+</body>
+</html>
