@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, render_to_response
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from bokeh.plotting import figure, output_file, show 
 from bokeh.resources import CDN
 from bokeh.embed import components
 
-from .models import BloodPressure
+from .models import BloodPressure, validate_name
 from django.http import HttpResponseRedirect
 
 def index(request): #the index view
@@ -12,18 +14,19 @@ def index(request): #the index view
 	if request.method == "POST": #checking if the request method is a POST
 		if "itemAdd" in request.POST: #checking if there is a request to add a item
 			topNumber = request.POST["topNumber"] #titletitle = request.POST["description"] #title
+			#validate_even(int(topNumber))
+			#print (request.POST)
 			bottomNumber = request.POST["bottomNumber"] #bottomNumber
 			puls = request.POST["puls"] #puls
 			date = str(request.POST["DateTime"]) #date
 			content = topNumber + bottomNumber + puls + " -- " + date #conten
 			Item = BloodPressure(topNumber=topNumber, bottomNumber=bottomNumber, puls=puls, created=date)
-			print (bottomNumber, bottomNumber)
+			#print (bottomNumber, bottomNumber)
 			Item.save() #saving the Item 
 			return redirect("/") #reloading the page
-
 		if "itemDelete" in request.POST: #checking if there is a request to delete a item
 			checkedlist = request.POST.getlist('checkedbox')
-			print (checkedlist)
+			#print (checkedlist)
 			#checkedlist.append(request.POST["checkedbox"]) #checked items to be deleted
 			for GroceryList_id in checkedlist:
 				try:
@@ -32,7 +35,7 @@ def index(request): #the index view
 				except BloodPressure.DoesNotExist:
 					item = None
 		if "Data" in request.POST:
-			print ('wwwww')
+			#print ('wwwww')
 			return redirect('/data')
 		if "plotData" in request.POST:
 			return redirect('/plots_bokeh')
@@ -41,7 +44,6 @@ def index(request): #the index view
 def data (request):
 	bp = BloodPressure.objects.all()
 	return render(request, "data.html", {"bp": bp})
-	
 def plots_bokeh(request):
 	bp = BloodPressure
 	i = 0
@@ -60,7 +62,9 @@ def plots_bokeh(request):
 	plot.scatter(x, y)
 	script, div = components(plot, CDN)
 	return render(request, "plots_bokeh.html", {"the_script": script, "the_div": div})
-	
+def validate_even(value):
+	if value % 2 != 0:
+		raise ValidationError(_('%(value)s is not an even number'),params={'value': value},)
 	
 	
 	

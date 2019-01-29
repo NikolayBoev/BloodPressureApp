@@ -22,6 +22,7 @@ from bloodpressurelog.views import index, data, plots_bokeh
 urlpatterns = [
    # url(r'^admin/', admin.site.urls),
 	url(r'^$', index, name="index"),
+	url('index', index, name="index"),
 	url('data', data, name="data"),
 	url('plots_bokeh', plots_bokeh, name="plots_bokeh"),
 ]
