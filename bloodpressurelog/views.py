@@ -9,6 +9,7 @@ from bokeh.embed import components
 from .models import BloodPressure, validate_name
 from django.http import HttpResponseRedirect
 
+
 def index(request): #the index view
 	bp = BloodPressure.objects.all() #quering all items with the object manager
 	if request.method == "POST": #checking if the request method is a POST
@@ -42,16 +43,22 @@ def index(request): #the index view
 			
 	return render(request, "index.html", {"bp": bp})
 def data (request):
+	import pandas as pd
 	bp = BloodPressure.objects.all()
+	temp = []
+	for b in bp:
+		tmp = [b.created, b.topNumber, b.bottomNumber, b.puls]
+		temp.append(tmp)
 	return render(request, "data.html", {"bp": bp})
 def plots_bokeh(request):
-	bp = BloodPressure
+	bp = BloodPressure.objects.filter(topNumber=120)
+	#print(len(bp))
 	i = 0
 	x,y = [], []
 	while i < 20:
 		try:
 			item = BloodPressure.objects.get(id=i) #getting item id
-			print (item.topNumber)
+			#print (item.topNumber)
 			y.append (item.topNumber)
 			x.append (item.bottomNumber)
 		except BloodPressure.DoesNotExist:
@@ -65,12 +72,3 @@ def plots_bokeh(request):
 def validate_even(value):
 	if value % 2 != 0:
 		raise ValidationError(_('%(value)s is not an even number'),params={'value': value},)
-	
-	
-	
-	
-	
-	
-	
-	
-	
