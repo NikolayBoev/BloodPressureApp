@@ -6,7 +6,7 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.resources import CDN
 from bokeh.embed import components
 
-from .models import BloodPressure, validate_name
+from .models import BloodPressure, statistics
 from django.http import HttpResponseRedirect
 
 
@@ -44,12 +44,18 @@ def index(request): #the index view
 	return render(request, "index.html", {"bp": bp})
 def data (request):
 	import pandas as pd
+	bp = BloodPressure.pdobjects.all()
+	df = bp.to_dataframe()
+	describe = df.describe()
+	statistics.objects.all().delete()
+	ii = 0
+	while ii < describe.shape[0]:
+		Item = statistics(name=describe.index[ii],topNumber=describe.topNumber[ii], bottomNumber=describe.bottomNumber[ii], puls=describe.puls[ii])
+		Item.save()
+		ii += 1
+	statistic = statistics.objects.all()
 	bp = BloodPressure.objects.all()
-	temp = []
-	for b in bp:
-		tmp = [b.created, b.topNumber, b.bottomNumber, b.puls]
-		temp.append(tmp)
-	return render(request, "data.html", {"bp": bp})
+	return render(request, "data.html", {"bp": bp, "statistic": statistic})
 def plots_bokeh(request):
 	bp = BloodPressure.objects.filter(topNumber=120)
 	#print(len(bp))
