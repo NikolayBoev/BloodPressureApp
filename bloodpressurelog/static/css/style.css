@@ -68,6 +68,11 @@ li a:hover:not(.active) {
   margin-left: 13%;
   padding-left: 2px;
 }
+.conten_diagram{
+	float: left;
+	width: 50%;
+	
+}
 .button {
   background-color: #4CAF50; /* Green */
   border: none;

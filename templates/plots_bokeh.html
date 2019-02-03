@@ -1,7 +1,40 @@
 {% extends 'layout/layout.html' %}
 {% block content %}
 <div class="content">
-      {{ the_div|safe }}
-    {{ the_script|safe }}
+	<div class="conten_diagram">
+		{{ the_div|safe }}
+		{{ the_script|safe }}
+		{{ div_histogram_topNumber|safe }}
+		{{ script_histogram_topNumber|safe }}
+		{{ div_histogram_buttomNumber|safe }}
+		{{ script_histogram_buttomNumber|safe }}
+		{{ div_histogram_Puls|safe }}
+		{{ script_histogram_Puls|safe }}
+	</div>
+	<div class="conten_diagram">
+		<table class="table">
+		<thead>
+		  <tr>
+			<th></th>
+			<th>SYS [mmHg]</th>
+			<th>DIA [mmHg]</th>
+			<th>Puls [1/min]</th>
+		  </tr>
+		</thead>
+		<tbody>
+		{% for data in statistic %} <!-- django template - for loop -->
+		  <tr>
+			<td>{{ data.name }}</td>
+			<td>{{ data.topNumber }}</td>
+			<td>{{ data.bottomNumber }}</td>
+			<td>{{ data.puls }}</td>
+		  </tr>
+		  {% endfor %}
+		</tbody>
+	  </table>
+	</div>
+	<div class="conten_diagram">
+		
+	</div>
 </div>
 {% endblock %}
