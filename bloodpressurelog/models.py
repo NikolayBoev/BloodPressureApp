@@ -13,6 +13,7 @@ class BloodPressure(models.Model): #BloodPressure able name that inherits models
 	bottomNumber = models.IntegerField(default=80) # a IntegerField
 	puls = models.IntegerField(default=80) # a IntegerField
 	created = models.DateField(default=timezone.now().strftime("%Y-%m-%d")) # a date
+	created_time = models.TimeField(default=timezone.now().strftime("%H:%M:%S")) # a date
 	objects = models.Manager()
 	pdobjects = DataFrameManager()
 	class Meta:

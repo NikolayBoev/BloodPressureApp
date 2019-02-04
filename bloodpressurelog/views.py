@@ -51,8 +51,9 @@ def index(request): #the index view
 			bottomNumber = request.POST["bottomNumber"] #bottomNumber
 			puls = request.POST["puls"] #puls
 			date = str(request.POST["DateTime"]) #date
+			created_time = str(request.POST["Time"]) #time
 			content = topNumber + bottomNumber + puls + " -- " + date #conten
-			Item = BloodPressure(topNumber=topNumber, bottomNumber=bottomNumber, puls=puls, created=date)
+			Item = BloodPressure(topNumber=topNumber, bottomNumber=bottomNumber, puls=puls, created=date, created_time=created_time)
 			Item.save() #saving the Item 
 			return redirect("/") #reloading the page
 		if "itemDelete" in request.POST: #checking if there is a request to delete a item

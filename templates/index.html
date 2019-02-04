@@ -14,8 +14,12 @@
 				<input id="puls" name="puls" type="text" placeholder="Puls" required>
 			  </div>
 			  <div>
-				<label for="DateTime">Date and time</label>
-				<input id="DateTime" name="DateTime" type="date" placeholder="Date and time" required>
+				<label for="DateTime">Date</label>
+				<input id="DateTime" name="DateTime" type="date" placeholder="Date and time" >
+			  </div>
+			  <div>
+				<label for="Time">Time</label>
+				<input id="Time" name="Time" type="time" placeholder="Time" value="17:00" >
 			  </div>
 			</div>
 			<div class="content">
@@ -29,7 +33,8 @@
 					<thead>
 					  <tr>
 						<th>Del/</th>
-						<th>Date and time</th>
+						<th>Date</th>
+						<th>Time</th> 
 						<th>SYS [mmHg]</th>
 						<th>DIA [mmHg]</th>
 						<th>Puls [1/min]</th>
@@ -40,6 +45,7 @@
 					  <tr>
 						<td><input type="checkbox" class="taskCheckbox" name="checkedbox" id="{{ groser.id }}" value="{{ groser.id }}"></td>
 						<td>{{ groser.created }}</td>
+						<td>{{ groser.created_time }}</td>
 						<td>{{ groser.topNumber }}</td>
 						<td>{{ groser.bottomNumber }}</td>
 						<td>{{ groser.puls }}</td>
