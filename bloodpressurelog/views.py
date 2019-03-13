@@ -72,15 +72,27 @@ def index(request): #the index view
 			
 	return render(request, "index.html", {"bp": bp})
 def data (request):
+	import pandas as pd
 	statistic = summary()
 	bp = BloodPressure.objects.all()
+	if request.method == "POST":
+		if "ExportToCsv" in request.POST:
+			bp = BloodPressure.pdobjects.all()
+			df = bp.to_dataframe()
+			df.to_csv(path_or_buf='data.csv', index=False)
+		if "ExportToExcel" in request.POST:
+			bp = BloodPressure.pdobjects.all()
+			df = bp.to_dataframe()
+			df.to_excel('data.xlsx', sheet_name='dataBlutPressure', index = False)
 	return render(request, "data.html", {"bp": bp, "statistic": statistic})
 def plots_bokeh(request):
 	bp = BloodPressure.pdobjects.all()
 	df = bp.to_dataframe()
 	TOOLS="hover,crosshair,pan,wheel_zoom,zoom_in,zoom_out,box_zoom,undo,redo,reset,tap,save,box_select,poly_select,lasso_select,"
 	plot = figure(tools=TOOLS, plot_width=400, plot_height=400, background_fill_color="#fafafa")
-	plot.square(df['topNumber'], df['bottomNumber'], size=10)
+	plot.xaxis.axis_label = "DIA [mmHg]"
+	plot.yaxis.axis_label = "SYS [mmHg]"
+	plot.circle(df['bottomNumber'], df['topNumber'], color='red', fill_alpha=0.2, size=10)
 	script, div = components(plot, CDN)
 	
 	import pandas as pd
