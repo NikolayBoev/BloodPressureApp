@@ -33,8 +33,8 @@ def create_histgram (data, y_label):
 	
 	plot = figure(tools='', plot_width=1400, plot_height=400, background_fill_color="#fafafa")
 	plot.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:], fill_color="navy", line_color="white", alpha=0.5)
-	plot.line(x, pdf, line_color="#ff8888", line_width=4, alpha=0.7, legend="PDF")
-	plot.line(x, cdf, line_color="orange", line_width=2, alpha=0.7, legend="CDF")
+	#plot.line(x, pdf, line_color="#ff8888", line_width=4, alpha=0.7, legend="PDF")
+	#plot.line(x, cdf, line_color="orange", line_width=2, alpha=0.7, legend="CDF")
 
 	plot.y_range.start = 0
 	plot.legend.location = "center_right"
