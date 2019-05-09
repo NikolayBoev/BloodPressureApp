@@ -8,6 +8,7 @@ from bokeh.embed import components
 
 from .models import BloodPressure, statistics
 from django.http import HttpResponseRedirect
+import datetime
 
 def summary ():
 	import pandas as pd
@@ -21,17 +22,18 @@ def summary ():
 		Item.save()
 		ii += 1
 	return statistics.objects.all()
+# Creating histogram of the measured data
 def create_histgram (data, y_label):
 	import numpy as np
 	import scipy.special
-	
+	TOOLS="hover"
 	hist, edges = np.histogram(data, density=True, bins=50)
 	x = np.array(data)
 	mu, sigma = 0, 0.5
 	pdf = 1/(sigma * np.sqrt(2*np.pi)) * np.exp(-(x-mu)**2 / (2*sigma**2))
 	cdf = (1+scipy.special.erf((x-mu)/np.sqrt(2*sigma**2)))/2
 	
-	plot = figure(tools='', plot_width=1400, plot_height=400, background_fill_color="#fafafa")
+	plot = figure(tools=TOOLS, plot_width=1400, plot_height=400, background_fill_color="#fafafa")
 	plot.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:], fill_color="navy", line_color="white", alpha=0.5)
 	#plot.line(x, pdf, line_color="#ff8888", line_width=4, alpha=0.7, legend="PDF")
 	#plot.line(x, cdf, line_color="orange", line_width=2, alpha=0.7, legend="CDF")
@@ -51,7 +53,17 @@ def index(request): #the index view
 			bottomNumber = request.POST["bottomNumber"] #bottomNumber
 			puls = request.POST["puls"] #puls
 			date = str(request.POST["DateTime"]) #date
+			# Validating the date, if the user doesnt define a date, the now will be taken
+			if date == '':
+				now = datetime.datetime.now()
+				date = str(now)[:10]
+				print ('date:', date)
 			created_time = str(request.POST["Time"]) #time
+			# Validating the time, if the user doesnt define a tme, the now will be taken
+			if created_time == '17:00':
+				now = datetime.datetime.now()
+				created_time = str(now)[11:16]
+				print ('created_time:', created_time)
 			content = topNumber + bottomNumber + puls + " -- " + date #conten
 			Item = BloodPressure(topNumber=topNumber, bottomNumber=bottomNumber, puls=puls, created=date, created_time=created_time)
 			Item.save() #saving the Item 
@@ -64,13 +76,14 @@ def index(request): #the index view
 					item.delete() #deleting item
 				except BloodPressure.DoesNotExist:
 					item = None
-		if "Data" in request.POST:
+		if "Data" in request.POST: # redirecting to Data
 			#print ('wwwww')
 			return redirect('/data')
-		if "plotData" in request.POST:
+		if "plotData" in request.POST:# redirecting Plot Data
 			return redirect('/plots_bokeh')
 			
 	return render(request, "index.html", {"bp": bp})
+# The requst of Data button
 def data (request):
 	import pandas as pd
 	statistic = summary()
@@ -85,10 +98,11 @@ def data (request):
 			df = bp.to_dataframe()
 			df.to_excel('data.xlsx', sheet_name='dataBlutPressure', index = False)
 	return render(request, "data.html", {"bp": bp, "statistic": statistic})
+# The requst of Plot Data button
 def plots_bokeh(request):
 	bp = BloodPressure.pdobjects.all()
 	df = bp.to_dataframe()
-	TOOLS="hover,crosshair,pan,wheel_zoom,zoom_in,zoom_out,box_zoom,undo,redo,reset,tap,save,box_select,poly_select,lasso_select,"
+	TOOLS="hover"
 	plot = figure(tools=TOOLS, plot_width=400, plot_height=400, background_fill_color="#fafafa")
 	plot.xaxis.axis_label = "DIA [mmHg]"
 	plot.yaxis.axis_label = "SYS [mmHg]"

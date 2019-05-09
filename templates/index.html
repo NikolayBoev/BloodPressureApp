@@ -1,5 +1,16 @@
 {% extends 'layout/layout.html' %}
 {% block content %}
+
+			<script>
+			function myFunction() {
+			  var d = new Date()
+			  var day = d.getDate()
+			  var year = d.getFullYear()
+			  var month = d.getMonth()+1
+			  var n = day.toString()+'.'+month.toString()+'.'+year.toString()
+			  document.getElementById("InputDateTime").innerHTML = n;
+			}
+			</script>
 			<div class="content">
 			  <div>
 				<label for="topNumber">SYS [mmHg]</label>
@@ -14,11 +25,11 @@
 				<input id="puls" name="puls" type="text" placeholder="Puls" required>
 			  </div>
 			  <div>
-				<label for="DateTime">Date</label>
-				<input id="DateTime" name="DateTime" type="date" placeholder="Date and time" >
+				<label for="DateTime">Date (if the date is not defined by the user, the actual date will be taken)</label>
+				<input id="DateTime" name="DateTime" type="date" placeholder="Date and time">				
 			  </div>
 			  <div>
-				<label for="Time">Time</label>
+				<label for="Time">Time (if the time is not defined by the user, the actual time will be taken)</label>
 				<input id="Time" name="Time" type="time" placeholder="Time" value="17:00" >
 			  </div>
 			</div>
