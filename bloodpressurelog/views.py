@@ -49,9 +49,15 @@ def index(request): #the index view
 	bp = BloodPressure.objects.all() #quering all items with the object manager
 	if request.method == "POST": #checking if the request method is a POST
 		if "itemAdd" in request.POST: #checking if there is a request to add a item
-			topNumber = request.POST["topNumber"] #titletitle = request.POST["description"] #title
-			bottomNumber = request.POST["bottomNumber"] #bottomNumber
-			puls = request.POST["puls"] #puls
+			topNumber = int(request.POST["topNumber"]) #titletitle = request.POST["description"] #title
+			if topNumber > 180 or topNumber < 90:
+				pass
+			bottomNumber = int(request.POST["bottomNumber"]) #bottomNumber
+			if bottomNumber > 110 or bottomNumber < 50:
+				pass
+			puls = int(request.POST["puls"]) #puls
+			if puls > 150 or puls < 50:
+				pass
 			date = str(request.POST["DateTime"]) #date
 			# Validating the date, if the user doesnt define a date, the now will be taken
 			if date == '':
@@ -64,7 +70,7 @@ def index(request): #the index view
 				now = datetime.datetime.now()
 				created_time = str(now)[11:16]
 				print ('created_time:', created_time)
-			content = topNumber + bottomNumber + puls + " -- " + date #conten
+			content = str(topNumber) + str(bottomNumber) + str(puls) + " -- " + str(date) #conten
 			Item = BloodPressure(topNumber=topNumber, bottomNumber=bottomNumber, puls=puls, created=date, created_time=created_time)
 			Item.save() #saving the Item 
 			return redirect("/") #reloading the page
